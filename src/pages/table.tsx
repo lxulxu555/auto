@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Button, Popconfirm, Form ,AutoComplete} from "antd";
+import { Table, Input, Button, Popconfirm, Form ,AutoComplete,message} from "antd";
 const EditableContext = React.createContext<any>("");
 const mockVal = (str: string, repeat: number = 1) => {
     return {
@@ -65,8 +65,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   const save = async () => {
     try {
-      const values = await form.validateFields();
-      console.log(values);
+      const values = await form.validateFields() 
+      if(values.name && values.name !== '2'){
+        message.error('此人不存在')
+        return
+      }
       toggleEdit();
       handleSave({ ...record, ...values });
     } catch (errInfo) {
@@ -225,6 +228,10 @@ const TableComponent: React.FC<{}> = () => {
       }),
     };
   });
+
+  const a = () => {
+    console.log(dataSource)
+  }
   return (
     <div>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
@@ -238,7 +245,7 @@ const TableComponent: React.FC<{}> = () => {
         columns={columns}
         pagination={false}
       />
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+      <Button onClick={a} type="primary" style={{ marginBottom: 16 }}>
         submit
       </Button>
     </div>
